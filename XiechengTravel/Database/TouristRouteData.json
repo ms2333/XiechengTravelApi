@@ -1,0 +1,31 @@
+﻿[
+  {
+    "id": "99BA5433-DF5F-A898-C8E0-78B8BA55F251",
+    "Tittle": "埃及法老王3日游",
+    "description": "官方旗舰店亏本销售，全程免费喝可乐",
+    "originalPrice": 1119.8,
+    "disconuntPresent": 0.1,
+    "features": "<p>features没什么</p>",
+    "fees": "<p>fees没什么</p>",
+    "notes": "<p>notes没什么</p>",
+    "rating": 4.1,
+    "travelDays": 3,
+    "tripType": 3,
+    "departureCity": 3
+  },
+  {
+    "id": "A164B5F9-5D54-4647-928A-E8A87B2CFED9",
+    "Tittle": "埃菲尔铁塔3日游",
+    "description": "官方旗舰店亏本销售，全程免费喝可乐",
+    "originalPrice": 2998.8,
+    "disconuntPresent": 0.2,
+    "features": "<p>features没什么</p>",
+    "fees": "<p>fees没什么</p>",
+    "notes": "<p>notes没什么</p>",
+    "rating": 7.0,
+    "travelDays": 6,
+    "tripType": 1,
+    "departureCity": 4
+  }
+
+]
