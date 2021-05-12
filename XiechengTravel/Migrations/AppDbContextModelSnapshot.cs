@@ -46,7 +46,7 @@ namespace XiechengTravel.Migrations
                         new
                         {
                             Id = "308660dc-ae51-480f-824d-7dca6714c3e2",
-                            ConcurrencyStamp = "e2c6c72d-c6d5-4ebc-a725-248096d7372c",
+                            ConcurrencyStamp = "feef72bb-67b4-487f-9359-abc76a5ee793",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -237,16 +237,16 @@ namespace XiechengTravel.Migrations
                         {
                             Id = "90184155-dee0-40c9-bb1e-b5ed07afc04e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b056d988-cc22-42d6-909d-789fd8dabe8a",
+                            ConcurrencyStamp = "c817d7ef-5b7c-46a7-a1ad-34437f2306ff",
                             Email = "1527263338@qq.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "1527263338@QQ.COM",
                             NormalizedUserName = "1527263338@QQ.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELNYHcTCVGSc1dhhyH/d+NfQRe6QjgpYfEZ9L5CuTwpfozSQ/0TeGE6D8fl6K4mdYw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHctEVB55xHE/2boyl6cOvR3kRQKtfLLE9BpcDeMGq5ZrRbZ1HINKed2c4TPpsirRQ==",
                             PhoneNumber = "123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9c3dbb16-3640-4e76-8bcc-b79f39402786",
+                            SecurityStamp = "506a2a46-f090-42c7-80c0-5aebc61fa79c",
                             TwoFactorEnabled = false,
                             UserName = "1527263338@qq.com"
                         });
