@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using XiechengTravel.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.OpenApi.Models;
 
 namespace XiechengTravel
 {
@@ -54,17 +56,18 @@ namespace XiechengTravel
                         ValidAudience = _Configuration["Authentication:Audience"],
 
                         ValidateLifetime = true,//验证是否过期
-                        IssuerSigningKey=new SymmetricSecurityKey(secretBytes)//传入私钥
+                        IssuerSigningKey = new SymmetricSecurityKey(secretBytes)//传入私钥
                     };
                 });
             services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;//这里配置了对不支持的数据格式的请求返回406 unacceptable
             }
-            ).AddNewtonsoftJson(setupAction=> {
+            ).AddNewtonsoftJson(setupAction =>
+            {
                 setupAction.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
-                })
+            })
             .AddXmlDataContractSerializerFormatters()
             .ConfigureApiBehaviorOptions(setupAction =>
             {
@@ -87,8 +90,11 @@ namespace XiechengTravel
             //AutoMapper会扫描所有包含映射关系的Profile文件
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<ITouristRouteRepository, TouristRouteRepository>();
-            services.AddDbContext<AppDbContext>(option=> {
-                option.UseSqlServer(_Configuration["DbContext:ConnectionString"]);//配置使用SqlServer服务
+            services.AddDbContext<AppDbContext>(option =>
+            {
+                // option.UseSqlServer(_Configuration["DbContext:ConnectionString"]);//配置使用SqlServer服务
+                option.UseMySql(_Configuration["DbContext:MysqlConnectionString"],
+            new MySqlServerVersion(new Version(8, 0, 25)));
             });//注入database服务，在参数中使用lambda表达式惊醒配置数据库
                //每次请求都会重新创建一次服务，
                //AddSingleton 只创建一次服务，之后系统的每次请求都是使用的这一个实例
@@ -96,6 +102,22 @@ namespace XiechengTravel
 
             services.AddHttpClient();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();//IurlHelper
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Api接口文档",
+                    Description = ".NET5 Web API",
+                    //TermsOfService = new Uri(""),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Login Get Token(AdminAccount:  Email:1527263338@qq.com  Password:Ms123456)",
+                        Url = new Uri("http://www.flowerli.xyz/Auth/Login"),
+                    },
+                });
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,6 +129,12 @@ namespace XiechengTravel
                 app.UseDeveloperExceptionPage();
                 
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "REST-full API V1");
+                x.RoutePrefix = string.Empty;
+            });
             //你在哪
             app.UseRouting();
             //你是谁

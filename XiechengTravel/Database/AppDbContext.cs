@@ -9,37 +9,47 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace XiechengTravel.Database
 {
-    public class AppDbContext:IdentityDbContext<ApplicationUser> 
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
+        private readonly IConfiguration _configuration;
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
-
+            _configuration = configuration;
         }
         //指明哪些模型需要映射到数据库中
         public DbSet<TouristRoute> TouristRoutes { get; set; }//数据模型映射（每一张table都需要一个DbSet进行映射）
         public DbSet<TouristRoutePicture> TouristRoutePictures { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<LineItem> LineItems { get; set; }
-        public DbSet<Order> Orders { get; set;  }
+        public DbSet<Order> Orders { get; set; }
 
+
+        ////重写方法使用UseMysql
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseMySql(_configuration["DbContext:MysqlConnectionString"],
+        //    new MySqlServerVersion(new Version(8, 0, 11)));
+        //}
         //添加种子数据
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //从Json读取种子数据
-          // var JsonData =  File.ReadAllText(@"C:\Users\Flower-Li\source\repos\XiechengTravel\XiechengTravel\bin\Debug\net5.0\Database\TouristRouteData.json");
-           var JsonData =  File.ReadAllText(Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Database/TouristRouteData.json"));
+            //var JsonData = File.ReadAllText(@"C:\Users\Flower-Li\source\repos\XiechengTravel\XiechengTravel\bin\Debug\net5.0\Database\TouristRouteData.json");
+            var JsonData = File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Database/TouristRouteData.json");
             IList<TouristRoute> touristRoutes = JsonConvert.DeserializeObject<IList<TouristRoute>>(JsonData);//反序列化，将string=>object
 
-            var jsonPicData =  File.ReadAllText(Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/XiechengTravel/Database/TouristRoutePictureData.json"));
+            var jsonPicData = File.ReadAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"/Database/TouristRoutePictureData.json");
             IList<TouristRoutePicture> touristRoutePictures = JsonConvert.DeserializeObject<IList<TouristRoutePicture>>(jsonPicData);
 
 
             // 初始化用户与角色的种子数据
             // 1. 更新用户与角色的外键关系
-            modelBuilder.Entity<ApplicationUser>(b => {
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
                 b.HasMany(x => x.UserRoles)//有多个UserRoles
                 .WithOne()//设置为一对多的关系
                 .HasForeignKey(ur => ur.UserId)//UserId为外键
@@ -74,7 +84,7 @@ namespace XiechengTravel.Database
 
             //加密密码
             PasswordHasher<ApplicationUser> ph = new PasswordHasher<ApplicationUser>();
-            adminUser.PasswordHash = ph.HashPassword(adminUser, "Ms666666+");
+            adminUser.PasswordHash = ph.HashPassword(adminUser, "Ms123456");
             modelBuilder.Entity<ApplicationUser>().HasData(adminUser);
 
             // 4. 给用户加入管理员权限
@@ -91,5 +101,6 @@ namespace XiechengTravel.Database
             base.OnModelCreating(modelBuilder);
 
         }
+
     }
 }
